@@ -6,6 +6,9 @@ x0 = [theta0; theta_dot0];
 
 %Simulation Parameters
 T = 20;         %Simulation time
+dt = 0.005;
+square_t = 0:dt:20;
+square_x = square(square_t);
 
 %Controller Params
 tau_values = [1 2 3 4];
@@ -20,7 +23,8 @@ colors = ['b', 'r', 'g', 'w']; % Define a set of colors
 %Using MATLAB ode45's Runge-Kutta integration:
 for i = 1:length(tau_values)
     tau = tau_values(i);
-    [time, x] = ode45(@(t,x) Motor(t, x, load_values, tau), [0 T], x0);
+    [time, x] = ode45(@(t,x) Motor(t, x, 500*square(t), tau), [0 T], x0);
+    x = x./(2*pi*60); %convert rad to rps
     
     % Plot original solution
     subplot(2, 1, 1); % Two rows, one column, first plot
@@ -28,8 +32,8 @@ for i = 1:length(tau_values)
     plot(time, x(:,1), colors(i));
     grid on;
     xlabel('Time [s]');
-    ylabel('Shaft angle \theta [rad]');
-    title(['Shaft Angle Responses for Different tau Values (Load =' num2str(load_values) 'kg)']);
+    ylabel('Shaft angle \theta [rotations]');
+    title(['Shaft Angle Responses for Different tau Values (Load = 200*square(t) kg)']);
     
     % Compute and plot derivative
     dt = diff(time); % Differences in time
@@ -42,14 +46,16 @@ for i = 1:length(tau_values)
     plot(time_derivative, derivative, colors(i));
     grid on;
     xlabel('Time [s]');
-    ylabel('Shaft Velocity [rad/s]');
+    ylabel('Shaft Velocity [rpm]');
     title('Shaft Velocity');
 end
 
 % Add legends
 subplot(2, 1, 1);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
+plot(square_t,200*square_x,"y");
 subplot(2, 1, 2);
+plot(square_t,200*square_x,"y");
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
 
 hold off;
