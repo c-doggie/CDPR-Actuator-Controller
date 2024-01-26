@@ -1,21 +1,55 @@
 clc;
-%variables
+%Initial Conditions
 theta0 = 0;   %Initial angle
 theta_dot0 = 0;  %Initial angular velocity
-dt = 0.001;      %Integration time step
-T = 50;         %Simulation time
+x0 = [theta0; theta_dot0];
 
-time = 0:dt:T;
+%Simulation Parameters
+T = 20;         %Simulation time
+
+%Controller Params
+tau_values = [1 2 3 4];
+load_values = [1 2 3 4];
+
+% Prepare the figure
+figure;
+hold on;
+grid on;
+colors = ['b', 'r', 'g', 'w']; % Define a set of colors
 
 %Using MATLAB ode45's Runge-Kutta integration:
-x0 = [theta0; theta_dot0];
-[time2,x2] = ode45(@Motor,[0 T],x0);
-time2 = time2';
-x2 = x2';       %States must be a column vector
+for i = 1:length(tau_values)
+    tau = tau_values(i);
+    [time, x] = ode45(@(t,x) Motor(t, x, load_values(4), tau), [0 T], x0);
+    
+    % Plot original solution
+    subplot(2, 1, 1); % Two rows, one column, first plot
+    hold on;
+    plot(time, x(:,1), colors(i));
+    grid on;
+    xlabel('Time [s]');
+    ylabel('Motor angle \theta [rad]');
+    title('Motor Angle Responses for Different tau Values (Load = 4kg)');
+    
+    % Compute and plot derivative
+    dt = diff(time); % Differences in time
+    dx = diff(x(:,1)); % Differences in solution
+    derivative = dx ./ dt;
+    time_derivative = time(1:end-1) + dt/2; % Time vector for derivative
 
-%Plotting solutions
-plot(time2,x2(1,:))
-grid on
-legend('Runge-Kutte (ode45)')
-xlabel('Time [s]')
-ylabel('Motor angle \theta [rad]')
+    subplot(2, 1, 2); % Two rows, one column, second plot
+    hold on;
+    plot(time_derivative, derivative, colors(i));
+    grid on;
+    xlabel('Time [s]');
+    ylabel('Derivative of Motor angle [rad/s]');
+    title('Derivative of Motor Angle Responses');
+end
+
+% Add legends
+subplot(2, 1, 1);
+legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
+subplot(2, 1, 2);
+legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
+
+hold off;
