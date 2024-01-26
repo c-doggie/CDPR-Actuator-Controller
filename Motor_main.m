@@ -34,7 +34,7 @@ for i = 1:length(tau_values)
     grid on;
     xlabel('Time [s]');
     ylabel('Shaft angle \theta [rotations]');
-    title(['Shaft Angle Responses for Different tau Values (Load = ' num2str(load_values) 'kg)']);
+    title(['Shaft Angle Responses for Different Tau Values (Load = ' num2str(load_values) 'kg)']);
     
     % Compute and plot derivative
     dt = diff(time); % Differences in time
@@ -56,5 +56,6 @@ subplot(2, 1, 1);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
 subplot(2, 1, 2);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
+sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N}) - k_t\dot{\theta}$','Interpreter','latex')
 
 hold off;
