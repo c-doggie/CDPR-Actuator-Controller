@@ -5,15 +5,15 @@ theta_dot0 = 0;  %Initial angular velocity
 x0 = [theta0; theta_dot0];
 
 %Simulation Parameters
-T = 20;         %Simulation time
+T = 5;         %Simulation time
 dt = 0.005;
 %Square wave config
-square_t = 0:dt:20;
+square_t = 0:dt:5;
 square_x = square(square_t);
 
 %Controller Params
 tau_values = [1 2 3 4];
-load_values = -100;
+load_values = -5;
 
 % Prepare the figure
 figure;
@@ -56,6 +56,6 @@ subplot(2, 1, 1);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
 subplot(2, 1, 2);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
-sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N}) - k_t\dot{\theta}$','Interpreter','latex')
+sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N}) + k_t\dot{\theta}$','Interpreter','latex')
 
 hold off;

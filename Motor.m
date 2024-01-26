@@ -17,7 +17,7 @@ theta_dot = x(2);
 %tau = 1; %nm
 
 %Motor EOM
-theta_dotdot = (tau + load*r + k_t*theta_dot) / (I_r + I_g/N);
+theta_dotdot = (tau + load*r - k_t*theta_dot) / (I_r + I_g/N);
 
 x_dot = [theta_dot; theta_dotdot];
 
