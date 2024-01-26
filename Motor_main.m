@@ -9,7 +9,7 @@ T = 20;         %Simulation time
 
 %Controller Params
 tau_values = [1 2 3 4];
-load_values = [1 2 3 4];
+load_values = -100;
 
 % Prepare the figure
 figure;
@@ -20,7 +20,7 @@ colors = ['b', 'r', 'g', 'w']; % Define a set of colors
 %Using MATLAB ode45's Runge-Kutta integration:
 for i = 1:length(tau_values)
     tau = tau_values(i);
-    [time, x] = ode45(@(t,x) Motor(t, x, load_values(4), tau), [0 T], x0);
+    [time, x] = ode45(@(t,x) Motor(t, x, load_values, tau), [0 T], x0);
     
     % Plot original solution
     subplot(2, 1, 1); % Two rows, one column, first plot
@@ -28,8 +28,8 @@ for i = 1:length(tau_values)
     plot(time, x(:,1), colors(i));
     grid on;
     xlabel('Time [s]');
-    ylabel('Motor angle \theta [rad]');
-    title('Motor Angle Responses for Different tau Values (Load = 4kg)');
+    ylabel('Shaft angle \theta [rad]');
+    title(['Shaft Angle Responses for Different tau Values (Load =' num2str(load_values) 'kg)']);
     
     % Compute and plot derivative
     dt = diff(time); % Differences in time
@@ -42,8 +42,8 @@ for i = 1:length(tau_values)
     plot(time_derivative, derivative, colors(i));
     grid on;
     xlabel('Time [s]');
-    ylabel('Derivative of Motor angle [rad/s]');
-    title('Derivative of Motor Angle Responses');
+    ylabel('Shaft Velocity [rad/s]');
+    title('Shaft Velocity');
 end
 
 % Add legends
