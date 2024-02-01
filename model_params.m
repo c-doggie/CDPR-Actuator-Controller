@@ -5,6 +5,8 @@ I_r = 10*10^-3; %inertia of rotor (kg m)
 I_g = 7.44*10^-3; %inertia of gearbox (kg m)
 k_t = 0.67; %torque constant 
 N = 6; %gear ratio of motor
+critical_velocity_friction_coefficient = 0.1; %
+critical_velocity = 0;
 
 %------------------- Simulation Parameters -----------------
 

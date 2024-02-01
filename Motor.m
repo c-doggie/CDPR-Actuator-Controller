@@ -12,6 +12,9 @@ theta_dot = x(2);
 %tau = 1; %nm
 
 %Motor EOM
+if (abs(theta_dot) < critical_velocity) 
+    
+end
 theta_dotdot = (tau + load*r - k_t*theta_dot) / (I_r + I_g/N);
 
 x_dot = [theta_dot; theta_dotdot];
