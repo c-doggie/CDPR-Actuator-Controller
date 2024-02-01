@@ -1,14 +1,18 @@
 clc;
+clear;
 model_params
+
+%square wave config
+square_x = square_wave(square_t, sq_amplitude, sq_period);
 
 % Prepare the figure
 figure;
-colors = ['b', 'r', 'g', 'm'];
+colors = ['b', 'r', 'g', 'm', 'w'];
 
 % Plot the square wave before the loop
-subplot(2, 1, 1);
-plot(square_t, square_wave(square_t,0.5,sq_period), '.-','HandleVisibility','off'); % Plot the square wave
-%hold on;
+subplot(3, 1, 1);
+plot(square_t, 0.1*square_wave(square_t,sq_amplitude,sq_period), '.-','HandleVisibility','off'); % Plot the square wave
+hold on;
 
 % Using MATLAB ode45's Runge-Kutta integration:
 for i = 1:length(tau_values)
@@ -48,6 +52,7 @@ for i = 1:length(tau_values)
     grid on;
     xlabel('Time [s]');
     ylabel('Shaft Acceleration [rad/s^2]');
+    %ylim([-10 10])
     title('Shaft Acceleration Response');
     
 
@@ -64,7 +69,7 @@ sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N}) + k_t\dot{\theta}$','Interpr
 
 hold off;
 
-% Square wave config
+% Square wave function
 function square_out = square_wave(t, amplitude, period)
     square_out = amplitude*square(period*t);
 end

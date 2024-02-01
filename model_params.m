@@ -14,15 +14,14 @@ theta_dot0 = 0;  % Initial angular velocity
 x0 = [theta0; theta_dot0];
 
 % Simulation Parameters
-T = 0.2;         
+T = 20;         
 dt = 0.001;
 
 % Controller Params
-tau_values = [1 2 3 4];
+tau_values = [-4 -2 0 2 4];
 %load_values = -5;
 
 %square config
 sq_amplitude = -200;
-sq_period = 2*pi*10;
+sq_period = 2*pi*0.5;
 square_t = 0:dt:T;
-square_x = square_wave(square_t, sq_amplitude, sq_period);
