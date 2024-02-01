@@ -1,10 +1,5 @@
 function x_dot = Motor(t, x, load, tau)
-
-r = 1.75/100; %radius of shaft load
-I_r = 10*10^-3; %inertia of rotor
-I_g = 7.44*10^-3; %inertia of gearbox
-k_t = 0.67; %torque constant
-N = 6; %gear ratio of motor
+model_params
 
 %Current states
 theta = x(1);

@@ -1,22 +1,5 @@
 clc;
-% Initial Conditions
-theta0 = 0;   % Initial angle
-theta_dot0 = 0;  % Initial angular velocity
-x0 = [theta0; theta_dot0];
-
-% Simulation Parameters
-T = 0.2;         
-dt = 0.001;
-
-% Controller Params
-tau_values = [1 2 3 4];
-%load_values = -5;
-
-%square config
-sq_amplitude = 200;
-sq_period = 2*pi*10;
-square_t = 0:dt:T;
-square_x = square_wave(square_t, sq_amplitude, sq_period);
+model_params
 
 % Prepare the figure
 figure;
@@ -32,29 +15,50 @@ for i = 1:length(tau_values)
     
     [time, x] = ode45(@(t,x) Motor(t, x, square_wave(t,sq_amplitude,sq_period), tau_values(i)), [0 T], x0);
 
+    x = x./(2*pi); %convert to radians
+
     % Plot original solution
-    subplot(2, 1, 1);
+    subplot(3, 1, 1);
     hold on;
     plot(time, x(:,1), colors(i));
     grid on;
     xlabel('Time [s]');
-    ylabel('Shaft Velocity [rad/s]');
-    title(['Shaft Velocity Responses for Different Tau Values (Load = ' num2str(sq_amplitude) '*square(' num2str(sq_period) '*t) kg)']);
+    ylabel('Shaft Position [rad]');
+    title(['Shaft Position Responses for Different Tau Values (Load = ' num2str(sq_amplitude) '*square(' num2str(sq_period) '*t) kg)']);
     
     % Compute and plot derivative
-    subplot(2, 1, 2); % Two rows, one column, second plot
+    subplot(3, 1, 2); % Two rows, one column, second plot
     hold on;
     plot(time, x(:,2), colors(i));
     grid on;
     xlabel('Time [s]');
+    ylabel('Shaft Velocity [rad/s]');
+    title('Shaft Velocity');
+
+
+    % Compute and plot acceleration
+    dt2 = diff(time);
+    dx2 = diff(x(:,2));
+    accel = dx2 ./ dt2;
+    time_derivative = time(1:end-1) + dt2/2; % Time vector for derivative
+
+    subplot(3,1,3);
+    hold on;
+    plot(time_derivative, accel, colors(i));
+    grid on;
+    xlabel('Time [s]');
     ylabel('Shaft Acceleration [rad/s^2]');
-    title('Shaft Acceleration');
+    title('Shaft Acceleration Response');
+    
+
 end
 
 % Add legends for the response curves only
-subplot(2, 1, 1);
+subplot(3, 1, 1);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
-subplot(2, 1, 2);
+subplot(3, 1, 2);
+legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
+subplot(3,1,3);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
 sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N}) + k_t\dot{\theta}$','Interpreter','latex')
 
