@@ -50,7 +50,7 @@ subplot(2, 1, 1);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
 subplot(2, 1, 2);
 legend(arrayfun(@(tau) ['tau = ', num2str(tau)], tau_values, 'UniformOutput', false), 'Location', 'best');
-sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N}) + k_t\dot{\theta}$','Interpreter','latex')
+sgtitle('$T+Fr = \ddot{\theta_1}(I_r+\frac{I_g}{N})$','Interpreter','latex')
 
 hold off;
 
